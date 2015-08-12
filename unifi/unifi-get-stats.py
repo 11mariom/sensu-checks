@@ -22,14 +22,17 @@ args = parser.parse_args()
 c = Controller(args.controller, args.username, args.password, args.version, args.siteid)
 
 aps = c.get_aps()
-total = guests = users = 0
+total = guests = users = rx = tx = 0
 data = dict(all=1)
 
 for ap in aps:
-    data[ap['name']] = dict(uptime=ap['uptime'], total=ap['num_sta'], guests=ap['guest-num_sta'], users=ap['user-num_sta'])
+    data[ap['name']] = dict(uptime=ap['uptime'], total=ap['num_sta'], guests=ap['guest-num_sta'], users=ap['user-num_sta'],
+                            tx=ap['stat']['tx_bytes'], rx=ap['stat']['rx_bytes'])
     total += ap['num_sta']
     guests += ap['guest-num_sta']
     users += ap['user-num_sta']
+    rx += ap['stat']['rx_bytes']
+    tx += ap['stat']['tx_bytes']
 
-data["all"] = dict( total=total, guests=guests, users=users )
+data["all"] = dict( total=total, guests=guests, users=users, rx=rx, tx=tx )
 print json.dumps(data)
