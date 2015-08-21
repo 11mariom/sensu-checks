@@ -42,13 +42,13 @@ class PostgresStatus < Sensu::Plugin::Metric::CLI::Graphite
     long: '--password PASS'
 
   option :host,
-    description: 'IP of squid host',
+    description: 'IP of PostgreSQL host',
     short: '-h HOST',
     long: '--host HOST',
     default: "127.0.0.1"
 
   option :port,
-    description: 'Port of squid host',
+    description: 'Port of PostgreSQL host',
     short: '-p PORT',
     long: '--port PORT',
     default: "5432"
