@@ -13,7 +13,8 @@ Options for _from_ are describen in documentation of SMSApi - it could be f.e. E
     "password": "<password for api>",
     "from": "<type of message>",
     "to": "<number>",
-    "test": "false"
+    "test": "false",
+    "debug": "true"
   }
 }
 ```

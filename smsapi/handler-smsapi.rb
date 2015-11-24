@@ -51,8 +51,13 @@ class Smsapi < Sensu::Handler
     http.use_ssl = true
     request = Net::HTTP::Get.new("#{uri.request_uri}/sms.do?#{data}")
     response = http.request(request)
-    puts "#{data}"
-    puts "#{response.body}"
+
+    if @debug
+      open("/tmp/smsapi.log", "a") do |f|
+        f.puts "#{data}"
+        f.puts "#{response.body}"
+      end
+    end
   end
 
   def handle
@@ -63,9 +68,16 @@ class Smsapi < Sensu::Handler
     @from = settings[json_config]['from']
     @to = settings[json_config]['to']
     @test = settings[json_config]['test'] || false
+    @debug = settings[json_config]['debug'] || false
 
     @message = "#{action_to_string} #{@event['client']['name']} - #{status_to_string}: #{@event['check']['name']}"
     send_sms
     puts "#{@message}"
+
+    if @debug
+      open("/tmp/smsapi.log", "a") do |f|
+        f.puts "#{@message}"
+      end
+    end
   end
 end
