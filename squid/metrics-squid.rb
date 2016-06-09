@@ -50,7 +50,6 @@ class SquidStatus < Sensu::Plugin::Metric::CLI::Graphite
     mgr_info = `squidclient -h #{config[:host]} -p #{config[:port]} mgr:info`
 
     mgr_info.scan(/\s+([\w %\(\)]+):\s+(\d+[\.\d]*)/) do |name, value|
-      #output name, value
       case name
         when "Number of clients accessing cache" then
           output "#{config[:scheme]}.clients", value
@@ -71,6 +70,9 @@ class SquidStatus < Sensu::Plugin::Metric::CLI::Graphite
         when "HTTP Requests (All)" then
           output "#{config[:scheme]}.servicetime_httpreq", value
       end
+    end
+    if (mgr_info.lines.first !~ /200 OK/) then
+      critical "Squid not running on #{config[:host]}:#{config[:port]}"
     end
     ok
   end
